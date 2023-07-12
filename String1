@@ -1,0 +1,77 @@
+import java.util.HashMap;
+import java.util.Map;
+
+public class SparseMatrixMultiplication {
+    public static int[][] multiplySparseMatrices(int[][] mat1, int[][] mat2) {
+        int m = mat1.length;
+        int k = mat1[0].length;
+        int n = mat2[0].length;
+
+        int[][] result = new int[m][n];
+        Map<String, Integer> sparseMat1 = new HashMap<>();
+        Map<String, Integer> sparseMat2 = new HashMap<>();
+
+        // Step 1: Create sparseMat1
+        for (int row = 0; row < m; row++) {
+            for (int col = 0; col < k; col++) {
+                if (mat1[row][col] != 0) {
+                    String key = row + "," + col;
+                    sparseMat1.put(key, mat1[row][col]);
+                }
+            }
+        }
+
+        // Step 2: Perform multiplication and create sparseMat2
+        for (int row = 0; row < k; row++) {
+            for (int col = 0; col < n; col++) {
+                if (mat2[row][col] != 0) {
+                    for (int i = 0; i < m; i++) {
+                        String key = i + "," + row;
+                        if (sparseMat1.containsKey(key)) {
+                            int mat1Val = sparseMat1.get(key);
+                            int product = mat1Val * mat2[row][col];
+                            result[i][col] += product;
+                            if (result[i][col] != 0) {
+                                sparseMat2.put(i + "," + col, result[i][col]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Step 3: Populate result matrix from sparseMat2
+        for (Map.Entry<String, Integer> entry : sparseMat2.entrySet()) {
+            String[] indices = entry.getKey().split(",");
+            int row = Integer.parseInt(indices[0]);
+            int col = Integer.parseInt(indices[1]);
+            result[row][col] = entry.getValue();
+        }
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[][] mat1 = {
+            {1, 0, 0},
+            {0, 0, 2},
+            {0, 3, 0}
+        };
+
+        int[][] mat2 = {
+            {4, 0, 0},
+            {0, 5, 0},
+            {0, 0, 6}
+        };
+
+        int[][] result = multiplySparseMatrices(mat1, mat2);
+
+        // Print the result
+        for (int[] row : result) {
+            for (int num : row) {
+                System.out.print(num + " ");
+            }
+            System.out.println();
+        }
+    }
+}
