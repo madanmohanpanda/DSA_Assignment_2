@@ -1,0 +1,143 @@
+1. Given two strings s1 and s2, return the lowest ASCII sum of deleted characters to make two strings equal.
+
+
+
+    public class LowestASCIISum {
+    public static int minimumDeleteSum(String s1, String s2) {
+        int m = s1.length();
+        int n = s2.length();
+        
+        int[][] dp = new int[m + 1][n + 1];
+        
+        // Fill the first row
+        for (int j = 1; j <= n; j++) {
+            dp[0][j] = dp[0][j - 1] + s2.charAt(j - 1);
+        }
+        
+        // Fill the first column
+        for (int i = 1; i <= m; i++) {
+            dp[i][0] = dp[i - 1][0] + s1.charAt(i - 1);
+        }
+        
+        // Fill the remaining cells
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = Math.min(dp[i - 1][j] + s1.charAt(i - 1), dp[i][j - 1] + s2.charAt(j - 1));
+                }
+            }
+        }
+        
+        return dp[m][n];
+    }
+    
+    public static void main(String[] args) {
+        String s1 = "delete";
+        String s2 = "leet";
+        
+        int lowestASCIISum = minimumDeleteSum(s1, s2);
+        System.out.println("Lowest ASCII sum of deleted characters: " + lowestASCIISum);
+    }
+}
+
+
+2.
+
+    import java.util.Stack;
+
+public class ValidParenthesis {
+    public static boolean checkValidString(String s) {
+        Stack<Integer> leftStack = new Stack<>();
+        Stack<Integer> starStack = new Stack<>();
+
+        int n = s.length();
+        for (int i = 0; i < n; i++) {
+            char c = s.charAt(i);
+            if (c == '(') {
+                leftStack.push(i);
+            } else if (c == '*') {
+                starStack.push(i);
+            } else {
+                if (!leftStack.isEmpty()) {
+                    leftStack.pop();
+                } else if (!starStack.isEmpty()) {
+                    starStack.pop();
+                } else {
+                    return false;
+                }
+            }
+        }
+
+        while (!leftStack.isEmpty() && !starStack.isEmpty()) {
+            if (leftStack.pop() > starStack.pop()) {
+                return false;
+            }
+        }
+
+        return leftStack.isEmpty();
+    }
+
+    public static void main(String[] args) {
+        String s = "(*)))";
+        boolean isValid = checkValidString(s);
+        System.out.println("Is the string valid? " + isValid);
+    }
+}
+
+
+
+
+7.
+public class SwapLetters {
+    public static boolean canSwapLetters(String s, String goal) {
+        if (s.length() != goal.length()) {
+            return false;
+        }
+
+        List<Integer> misplaced = new ArrayList<>();
+        List<Integer> mismatched = new ArrayList<>();
+
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) != goal.charAt(i)) {
+                mismatched.add(i);
+                if (mismatched.size() > 2) {
+                    return false;
+                }
+            } else if (s.charAt(i) == goal.charAt(i) && !mismatched.contains(i)) {
+                misplaced.add(i);
+                if (misplaced.size() > 2) {
+                    return false;
+                }
+            }
+        }
+
+        if (misplaced.size() == 0 && mismatched.size() == 0) {
+            return true;
+        } else if (misplaced.size() == 2 && mismatched.size() > 0) {
+            int misplacedIndex1 = misplaced.get(0);
+            int misplacedIndex2 = misplaced.get(1);
+            int mismatchedIndex = mismatched.get(0);
+
+            return s.charAt(misplacedIndex1) == goal.charAt(misplacedIndex2) &&
+                   s.charAt(misplacedIndex2) == goal.charAt(misplacedIndex1) &&
+                   s.charAt(mismatchedIndex) == goal.charAt(mismatchedIndex);
+        } else {
+            return false;
+        }
+    }
+
+    public static void main(String[] args) {
+        String s = "abc";
+        String goal = "acb";
+        boolean result = canSwapLetters(s, goal);
+        System.out.println(result);  // Output: true
+
+        s = "abcd";
+        goal = "dcba";
+        result = canSwapLetters(s, goal);
+        System.out.println(result);  // Output: false
+    }
+}
+
