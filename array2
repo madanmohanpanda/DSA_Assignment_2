@@ -1,0 +1,81 @@
+1. Given three integer arrays arr1, arr2 and arr3 sorted in strictly increasing order, return a sorted array of 
+only the integers that appeared in all three arrays.
+
+    import java.util.ArrayList;
+import java.util.List;
+
+public class CommonElements {
+    public static List<Integer> findCommonElements(int[] arr1, int[] arr2, int[] arr3) {
+        List<Integer> commonElements = new ArrayList<>();
+
+        int i = 0, j = 0, k = 0;
+
+        while (i < arr1.length && j < arr2.length && k < arr3.length) {
+            if (arr1[i] == arr2[j] && arr2[j] == arr3[k]) {
+                commonElements.add(arr1[i]);
+                i++;
+                j++;
+                k++;
+            } else if (arr1[i] < arr2[j]) {
+                i++;
+            } else if (arr2[j] < arr3[k]) {
+                j++;
+            } else {
+                k++;
+            }
+        }
+
+        return commonElements;
+    }
+
+    public static void main(String[] args) {
+        int[] arr1 = {1, 2, 3, 4, 5};
+        int[] arr2 = {2, 4, 5, 6, 7};
+        int[] arr3 = {2, 3, 5, 6};
+
+        List<Integer> common = findCommonElements(arr1, arr2, arr3);
+
+        // Print the common elements
+        for (int num : common) {
+            System.out.print(num + " ");
+        }
+    }
+}
+
+
+3.
+    public class MatrixTranspose {
+    public static int[][] transposeMatrix(int[][] matrix) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+
+        int[][] transpose = new int[cols][rows];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                transpose[j][i] = matrix[i][j];
+            }
+        }
+
+        return transpose;
+    }
+
+    public static void main(String[] args) {
+        int[][] matrix = {
+            {1, 2, 3},
+            {4, 5, 6},
+            {7, 8, 9}
+        };
+
+        int[][] transpose = transposeMatrix(matrix);
+
+        // Print the transpose
+        for (int[] row : transpose) {
+            for (int num : row) {
+                System.out.print(num + " ");
+            }
+            System.out.println();
+        }
+    }
+}
+
