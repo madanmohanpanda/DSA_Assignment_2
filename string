@@ -1,0 +1,190 @@
+1.
+
+import java.util.HashMap;
+
+public class IsomorphicStrings {
+    public static boolean isIsomorphic(String s, String t) {
+        if (s.length() != t.length()) {
+            return false;
+        }
+
+        HashMap<Character, Character> charMap = new HashMap<>();
+        HashMap<Character, Boolean> mappedChars = new HashMap<>();
+
+        for (int i = 0; i < s.length(); i++) {
+            char sChar = s.charAt(i);
+            char tChar = t.charAt(i);
+
+            if (charMap.containsKey(sChar)) {
+                if (charMap.get(sChar) != tChar) {
+                    return false;  // Different mapping for the same character in s
+                }
+            } else {
+                if (mappedChars.containsKey(tChar)) {
+                    return false;  // Different character in s mapping to the same character in t
+                }
+
+                charMap.put(sChar, tChar);
+                mappedChars.put(tChar, true);
+            }
+        }
+
+        return true;
+    }
+
+    public static void main(String[] args) {
+        String s = "egg";
+        String t = "add";
+        boolean result = isIsomorphic(s, t);
+        System.out.println(result);  // Output: true
+
+        s = "foo";
+        t = "bar";
+        result = isIsomorphic(s, t);
+        System.out.println(result);  // Output: false
+    }
+}
+
+2. 
+
+    import java.util.HashMap;
+
+public class StrobogrammaticNumber {
+    public static boolean isStrobogrammatic(String num) {
+        HashMap<Character, Character> strobogrammaticMap = new HashMap<>();
+        strobogrammaticMap.put('0', '0');
+        strobogrammaticMap.put('1', '1');
+        strobogrammaticMap.put('6', '9');
+        strobogrammaticMap.put('8', '8');
+        strobogrammaticMap.put('9', '6');
+
+        int left = 0;
+        int right = num.length() - 1;
+
+        while (left <= right) {
+            char leftChar = num.charAt(left);
+            char rightChar = num.charAt(right);
+
+            if (!strobogrammaticMap.containsKey(leftChar) || strobogrammaticMap.get(leftChar) != rightChar) {
+                return false;
+            }
+
+            left++;
+            right--;
+        }
+
+        return true;
+    }
+
+    public static void main(String[] args) {
+        String num = "69";
+        boolean result = isStrobogrammatic(num);
+        System.out.println(result);  // Output: true
+
+        num = "88";
+        result = isStrobogrammatic(num);
+        System.out.println(result);  // Output: true
+
+        num = "962";
+        result = isStrobogrammatic(num);
+        System.out.println(result);  // Output: false
+    }
+}
+3.
+
+    public class AddStrings {
+    public static String addStrings(String num1, String num2) {
+        StringBuilder sum = new StringBuilder();
+        int carry = 0;
+        int i = num1.length() - 1;
+        int j = num2.length() - 1;
+
+        while (i >= 0 || j >= 0 || carry > 0) {
+            int digit1 = (i >= 0) ? num1.charAt(i) - '0' : 0;
+            int digit2 = (j >= 0) ? num2.charAt(j) - '0' : 0;
+
+            int currentSum = digit1 + digit2 + carry;
+            sum.insert(0, currentSum % 10);  // Insert the least significant digit at the beginning
+            carry = currentSum / 10;
+
+            i--;
+            j--;
+        }
+
+        return sum.toString();
+    }
+
+    public static void main(String[] args) {
+        String num1 = "123";
+        String num2 = "456";
+        String result = addStrings(num1, num2);
+        System.out.println(result);  // Output: 579
+
+        num1 = "999";
+        num2 = "1";
+        result = addStrings(num1, num2);
+        System.out.println(result);  // Output: 1000
+    }
+}
+
+
+4.  
+    Given a string s, reverse the order of characters in each word within a sentence while still preserving whitespace and initial word order.
+
+    public class ReverseWords {
+    public static void main(String[] args) {
+        String sentence = "Hello, world! This is a test.";
+
+        String reversed = reverseWords(sentence);
+        System.out.println(reversed);
+    }
+
+    public static String reverseWords(String sentence) {
+        String[] words = sentence.split("\\s+");
+        StringBuilder reversedSentence = new StringBuilder();
+
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            StringBuilder reversedWord = new StringBuilder(word).reverse();
+            reversedSentence.append(reversedWord);
+
+            if (i != words.length - 1) {
+                reversedSentence.append(" ");
+            }
+        }
+
+        return reversedSentence.toString();
+    }
+}
+
+8.
+
+    public class CheckStraightLine {
+    public static void main(String[] args) {
+        int[][] coordinates = {{1, 2}, {3, 4}, {5, 6}, {7, 8}};
+        boolean isStraightLine = checkStraightLine(coordinates);
+        System.out.println("Is it a straight line? " + isStraightLine);
+    }
+
+    public static boolean checkStraightLine(int[][] coordinates) {
+        if (coordinates.length <= 2) {
+            return true; // Two or fewer points always form a straight line
+        }
+
+        int x0 = coordinates[0][0];
+        int y0 = coordinates[0][1];
+        int x1 = coordinates[1][0];
+        int y1 = coordinates[1][1];
+
+        for (int i = 2; i < coordinates.length; i++) {
+            int x = coordinates[i][0];
+            int y = coordinates[i][1];
+
+            if ((y1 - y0) * (x - x0) != (y - y0) * (x1 - x0)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
